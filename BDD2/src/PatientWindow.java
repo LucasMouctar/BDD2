@@ -13,8 +13,10 @@ public class PatientWindow extends JFrame
 	JButton buttonPatient = new JButton("Voir mes rdv antérieurs et futur");
 	
 	public PatientWindow(Connection conn)
-	{
+	{	
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+		setLocationRelativeTo(null);
 		
 		setResizable(false);
 		

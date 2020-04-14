@@ -15,6 +15,8 @@ public class RdvWindow extends JFrame
 	{
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
+		setLocationRelativeTo(null);
+		
 		setResizable(false);
 		
 		setLayout(new GridLayout(1,1));

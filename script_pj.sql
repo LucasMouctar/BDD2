@@ -33,7 +33,7 @@ EXECUTE IMMEDIATE 'DROP TABLE Patient CASCADE CONSTRAINTS' ;
 END IF ;  
 END ; 
 /
-CREATE TABLE Patient (patientId_Patient INT NOT NULL, nom_Patient VARCHAR(60), prenom_Patient VARCHAR(60), email_Patient VARCHAR(60), mot_de_passe_Patient VARCHAR(60), moyenId_Moyen INT, PRIMARY KEY (patientId_Patient)); 
+CREATE TABLE Patient (patientId_Patient INT NOT NULL, nom_Patient VARCHAR(60) NOT NULL, prenom_Patient VARCHAR(60) NOT NULL, email_Patient VARCHAR(60) NOT NULL, mot_de_passe_Patient VARCHAR(60) NOT NULL, moyenId_Moyen INT, PRIMARY KEY (patientId_Patient)); 
 DECLARE 
 existe_SeqPatient INTEGER ;  
 BEGIN 
@@ -110,21 +110,6 @@ END ;
 /
 CREATE TABLE CONSULTATION (creneauxId_Creneau INT NOT NULL,patientId_Patient INT NOT NULL, prix_CONSULTATION INT, typeReglement_CONSULTATION VARCHAR(60), posture_CONSULTATION VARCHAR(60), mot_clef_CONSULTATION VARCHAR(60), comportement_CONSULTATION VARCHAR(60), classification_CONSULTATION VARCHAR(60), noteAnxiete_CONSULTATION VARCHAR(60), dateReglement_CONSULTATION TIMESTAMP, PRIMARY KEY (creneauxId_Creneau,  patientId_Patient)); 
 DECLARE 
-existe_SeqConsultation INTEGER ;  
-BEGIN 
-SELECT count(*) INTO existe_SeqConsultation FROM all_sequences WHERE SEQUENCE_NAME = upper('SEQ_CONSULTATION') ;    
-IF existe_SeqConsultation > 0 THEN 
-EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_CONSULTATION' ;    
-END IF ;  
-END ;
-/
-CREATE SEQUENCE SEQ_CONSULTATION ; 
-CREATE TRIGGER TRIG_CONSULTATION BEFORE INSERT ON CONSULTATION FOR EACH ROW 
-BEGIN 
-SELECT SEQ_CONSULTATION.NEXTVAL INTO :new.creneauxId_Creneau FROM DUAL ;   
-END ;  
-/
-DECLARE 
 existe_EMPLOI INTEGER ; 
 BEGIN 
 SELECT count(*) INTO existe_EMPLOI FROM user_tables WHERE table_name = upper('EMPLOI') ;    
@@ -134,23 +119,8 @@ END IF ;
 END ; 
 /
 CREATE TABLE EMPLOI (patientId_Patient INT NOT NULL, professsionId_Profession INT NOT NULL, debut_Profession DATE, in_Profession DATE, PRIMARY KEY (patientId_Patient,  professsionId_Profession)); 
-DECLARE 
-existe_SeqEmploi INTEGER ;  
-BEGIN 
-SELECT count(*) INTO existe_SeqEmploi FROM all_sequences WHERE SEQUENCE_NAME = upper('SEQ_EMPLOI') ;    
-IF existe_SeqEmploi > 0 THEN 
-EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_EMPLOI' ;    
-END IF ;  
-END ;
-/
-CREATE SEQUENCE SEQ_EMPLOI ; 
-CREATE TRIGGER TRIG_EMPLOI BEFORE INSERT ON EMPLOI FOR EACH ROW 
-BEGIN 
-SELECT SEQ_EMPLOI.NEXTVAL INTO :new.patientId_Patient FROM DUAL ;   
-END ;  
-/
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_moyenId_Moyen FOREIGN KEY (moyenId_Moyen) REFERENCES Moyen (moyenId_Moyen); 
-ALTER TABLE CONSULTATION ADD CONSTRAINT FK_CONSULTATION_creneauxId_Creneau FOREIGN KEY (creneauxId_Creneau) REFERENCES Creneau (creneauxId_Creneau); 
-ALTER TABLE CONSULTATION ADD CONSTRAINT FK_CONSULTATION_patientId_Patient FOREIGN KEY (patientId_Patient) REFERENCES Patient (patientId_Patient); 
+ALTER TABLE CONSULTATION ADD CONSTRAINT FK_CONSULTATION_creneauxId FOREIGN KEY (creneauxId_Creneau) REFERENCES Creneau (creneauxId_Creneau); 
+ALTER TABLE CONSULTATION ADD CONSTRAINT FK_CONSULTATION_patientId FOREIGN KEY (patientId_Patient) REFERENCES Patient (patientId_Patient); 
 ALTER TABLE EMPLOI ADD CONSTRAINT FK_EMPLOI_patientId_Patient FOREIGN KEY (patientId_Patient) REFERENCES Patient (patientId_Patient); 
-ALTER TABLE EMPLOI ADD CONSTRAINT FK_EMPLOI_professsionId_Profession FOREIGN KEY (professsionId_Profession) REFERENCES Profession (professsionId_Profession);
+ALTER TABLE EMPLOI ADD CONSTRAINT FK_EMPLOI_professsionId FOREIGN KEY (professsionId_Profession) REFERENCES Profession (professsionId_Profession);

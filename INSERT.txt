@@ -1,0 +1,7 @@
+INSERT INTO MOYEN (moyennom_moyen) VALUES ('Internet');
+INSERT INTO MOYEN (moyennom_moyen) VALUES ('Bouche à oreille');
+INSERT INTO MOYEN (moyennom_moyen) VALUES ('Docteur');
+INSERT INTO MOYEN (moyennom_moyen) VALUES ('Autre patient');
+INSERT INTO MOYEN (moyennom_moyen) VALUES ('Pages jaunes');
+INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_patient, moyenid_moyen) VALUES ('Paul', 'Dupont', 'paul.dupont@gmail.com', '1234', 1);
+INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_patient, moyenid_moyen) VALUES ('Henry', 'Dupont', 'henry.dupont@gmail.com', '1234', 2);

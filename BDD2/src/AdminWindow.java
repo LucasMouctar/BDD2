@@ -14,8 +14,10 @@ public class AdminWindow extends JFrame
 	JButton buttonRdv = new JButton("Voir mes rdv antérieurs et futur");
 	
 	public AdminWindow(Connection conn)
-	{
+	{		
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		setLocationRelativeTo(null);
 		
 		setResizable(false);
 		

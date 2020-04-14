@@ -23,6 +23,8 @@ public class LoginWindow extends JFrame
 		
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
+		setLocationRelativeTo(null);
+		
 		setResizable(false);
 		
 		setLayout(new GridLayout(3,2,5,5));
@@ -44,7 +46,7 @@ public class LoginWindow extends JFrame
 					
 						if(!rset.next())
 						{
-							new ErrorWindow("Wrong username/password").setVisible(true);
+							JOptionPane.showMessageDialog(null, "Wrong username/password");
 						}
 						else
 						{
@@ -64,13 +66,13 @@ public class LoginWindow extends JFrame
 						}
 						else 
 						{
-							new ErrorWindow("Wrong username/password").setVisible(true);
+							JOptionPane.showMessageDialog(null, "Wrong username/password");
 						}
 					}
 				}
 				catch (SQLException e1) 
 				{
-					new ErrorWindow(e1.getMessage()).setVisible(true);
+					JOptionPane.showMessageDialog(null, e1.getMessage());
 				}
 		
 			}
@@ -97,7 +99,7 @@ public class LoginWindow extends JFrame
 					} 
 					catch (SQLException e) 
 					{
-						new ErrorWindow(e.getMessage()).setVisible(true);
+						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 					System.exit(0);
 				}
@@ -111,21 +113,17 @@ public class LoginWindow extends JFrame
 		try
 		{
 			Class.forName("oracle.jdbc.driver.OracleDriver"); 
-			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/orcl","pj_admin","oracle");
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/xe","admin","admin");
 			
 			new LoginWindow(conn).setVisible(true);
-			
-			//rset.close();
-			//stmt.close();
-			//conn.close(); 
 		}  
 		catch(SQLException e)
 		{
-			new ErrorWindow(e.getMessage()).setVisible(true);
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		catch(ClassNotFoundException e)
 		{
-			new ErrorWindow(e.getMessage()).setVisible(true);
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 }
