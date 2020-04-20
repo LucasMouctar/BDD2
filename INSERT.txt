@@ -5,3 +5,5 @@ INSERT INTO MOYEN (moyennom_moyen) VALUES ('Autre patient');
 INSERT INTO MOYEN (moyennom_moyen) VALUES ('Pages jaunes');
 INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_patient, moyenid_moyen) VALUES ('Paul', 'Dupont', 'paul.dupont@gmail.com', '1234', 1);
 INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_patient, moyenid_moyen) VALUES ('Henry', 'Dupont', 'henry.dupont@gmail.com', '1234', 2);
+INSERT INTO CRENEAU (datedebut_creneau, datefin_creneau) VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO consultation VALUES (1, 1, 100, 'CB', 'POSTURE', 'MOT_CLEF', ' COMPORTEMEN', 'CLASSIFICATION', '10', CURRENT_TIMESTAMP);

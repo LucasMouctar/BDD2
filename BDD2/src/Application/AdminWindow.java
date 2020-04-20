@@ -30,7 +30,7 @@ public class AdminWindow extends JFrame
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					new RdvWindow(conn).setVisible(true);
+					//new RdvWindow(conn).setVisible(true);
 				}
 			});
 		

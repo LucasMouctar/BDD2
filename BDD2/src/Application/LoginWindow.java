@@ -10,6 +10,10 @@ import java.awt.event.WindowEvent;
 
 public class LoginWindow extends JFrame
 {
+	/**
+	 * Fenêtre de connexion
+	 */
+	private static final long serialVersionUID = 1L;
 	private final int WINDOW_WIDTH = 300;
 	private final int WINDOW_HEIGHT = 150;
 	
@@ -52,10 +56,10 @@ public class LoginWindow extends JFrame
 						}
 						else
 						{
+							new PatientWindow(conn, rset.getInt("PATIENTID_PATIENT")).setVisible(true);
+							dispose();
 							rset.close();
 							stmt.close();
-							dispose();
-							new PatientWindow(conn).setVisible(true);
 						}
 					}
 					else

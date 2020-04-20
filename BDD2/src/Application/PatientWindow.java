@@ -8,13 +8,17 @@ import java.awt.event.ActionListener;
 
 public class PatientWindow extends JFrame
 {
+	/**
+	 * Fenêtre côté patient
+	*/
+	private static final long serialVersionUID = 1L;
 	private final int WINDOW_WIDTH = 1500;
 	private final int WINDOW_HEIGHT = 1500;
 	
 	JLabel labelPatient = new JLabel("Bienvenue !");
-	JButton buttonPatient = new JButton("Voir mes rdv antÃ©rieurs et futur");
+	JButton buttonPatient = new JButton("Voir mes rdv antérieurs et futurs");
 	
-	public PatientWindow(Connection conn)
+	public PatientWindow(Connection conn, int patient_id)
 	{	
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -25,14 +29,15 @@ public class PatientWindow extends JFrame
 		setLayout(new GridLayout(2,2,5,5));
 			
 		buttonPatient.addActionListener(new ActionListener()
-			{
+		{
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					new RdvWindow(conn).setVisible(true);		
+					new PatientMeetingWindow(conn, patient_id).setVisible(true);		
 				}
-			});
-		add(labelPatient);
+		});
+		
+		add(new JLabel(""+patient_id));
 		add(buttonPatient);
 	}
 }
