@@ -8,7 +8,7 @@ EXECUTE IMMEDIATE 'DROP TABLE Creneau CASCADE CONSTRAINTS' ;
 END IF ;  
 END ;
 /
-CREATE TABLE Creneau(creneauxId_Creneau INT NOT NULL, date_Creneau TIMESTAMP, duree_Creneau TIMESTAMP, PRIMARY KEY (creneauxId_Creneau)) ;
+CREATE TABLE Creneau(creneauxId_Creneau INT NOT NULL, datedebut_Creneau TIMESTAMP, datefin_Creneau TIMESTAMP, PRIMARY KEY (creneauxId_Creneau)) ;
 DECLARE 
 existe_SeqCreneau INTEGER ;  
 BEGIN 
