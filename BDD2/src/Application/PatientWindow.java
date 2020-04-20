@@ -33,7 +33,7 @@ public class PatientWindow extends JFrame
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					new PatientMeetingWindow(conn, patient_id).setVisible(true);		
+					new PatientAllMeetingWindow(conn, patient_id).setVisible(true);		
 				}
 		});
 		
