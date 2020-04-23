@@ -24,6 +24,7 @@ public class AddWindow extends JFrame
 	private JLabel labelLastname = new JLabel("Last name : ");
 	private JLabel labelEmail = new JLabel("Email : ");
 	private JLabel labelPassword = new JLabel("Password : ");
+	private JLabel labelDatebirth = new JLabel("Date of birth : ");
 	private JLabel labelJob = new JLabel("Actual job : ");
 	private JLabel labelDatejob = new JLabel("Since : ");
 	private JLabel labelMeans = new JLabel("Means of discovery : ");
@@ -33,7 +34,8 @@ public class AddWindow extends JFrame
 	private JTextField textEmail= new JTextField(20);
 	private JPasswordField textPassword = new JPasswordField(20);
 	private JTextField textJob = new JTextField(20);
-	private JDatePickerImpl datePicker;
+	private JDatePickerImpl datePicker1;
+	private JDatePickerImpl datePicker2;
 	private JComboBox listMeans;
 	
 	private JButton buttonAdd = new JButton("Add");
@@ -46,7 +48,7 @@ public class AddWindow extends JFrame
 		
 		setResizable(false);
 		
-		setLayout(new GridLayout(8,2));
+		setLayout(new GridLayout(9,2));
 		
 		try 
 		{
@@ -70,15 +72,24 @@ public class AddWindow extends JFrame
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		
-		Properties p = new Properties();
+		Properties p1 = new Properties();
 		
-		p.put("text.today", "today");
-		p.put("text.month", "month");
-		p.put("text.year", "year");
+		p1.put("text.today", "today");
+		p1.put("text.month", "month");
+		p1.put("text.year", "year");
 		
-		UtilDateModel model = new UtilDateModel();
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
+		Properties p2 = new Properties();
+		
+		p2.put("text.today", "today");
+		p2.put("text.month", "month");
+		p2.put("text.year", "year");
+		
+		UtilDateModel model1 = new UtilDateModel();
+		UtilDateModel model2 = new UtilDateModel();
+		JDatePanelImpl datePanel1 = new JDatePanelImpl(model1, p1);
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);
+		JDatePickerImpl datePicker1 = new JDatePickerImpl(datePanel1, new DateComponentFormatter());
+		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateComponentFormatter());
 		
 		add(labelFirstname);
 		add(textFirstname);
@@ -88,10 +99,12 @@ public class AddWindow extends JFrame
 		add(textEmail);
 		add(labelPassword);
 		add(textPassword);
+		add(labelDatebirth);
+		add(datePicker1);
 		add(labelJob);
 		add(textJob);
 		add(labelDatejob);	 
-		add(datePicker);
+		add(datePicker2);
 		add(labelMeans);
 		add(listMeans);
 		add(new JLabel(""));
@@ -113,13 +126,17 @@ public class AddWindow extends JFrame
 					
 					stmt0.close();
 					rs0.close();
+					
+					java.util.Date selectedDate1 = (java.util.Date) datePicker1.getModel().getValue();
+					java.sql.Date sqlDate1 = new java.sql.Date(selectedDate1.getTime());
 		
-					PreparedStatement stmt1 = conn.prepareStatement("INSERT INTO PATIENT (nom_Patient, prenom_Patient, email_Patient, mot_de_passe_Patient, moyenId_Moyen) VALUES (?, ? ,?, ?, ?) ");
+					PreparedStatement stmt1 = conn.prepareStatement("INSERT INTO PATIENT (nom_Patient, prenom_Patient, email_Patient, mot_de_passe_Patient, date_de_naissance_Patient, moyenId_Moyen) VALUES (?, ? ,?, ?, ?, ?) ");
 					stmt1.setString(1, textLastname.getText());
 					stmt1.setString(2, textFirstname.getText());
 					stmt1.setString(3, textEmail.getText());
 					stmt1.setString(4, new String(textPassword.getPassword()));
-					stmt1.setInt(5, meansId);
+					stmt1.setDate(5,sqlDate1);
+					stmt1.setInt(6, meansId);
 					stmt1.executeUpdate();
 					
 					stmt1.close();
@@ -139,7 +156,7 @@ public class AddWindow extends JFrame
 					
 					int professionId;
 					
-					if(rs3.next()) // Si cette profession existe deja dans la bdd
+					if(rs3.next()) // If this profession exist already in the database
 					{
 						professionId = rs3.getInt(1);
 						stmt3.close();
@@ -165,12 +182,12 @@ public class AddWindow extends JFrame
 					
 					PreparedStatement stmt6 = conn.prepareStatement("INSERT INTO EMPLOI VALUES(?,?,?,?)");
 					
-					java.util.Date selectedDate = (java.util.Date) datePicker.getModel().getValue();
-					java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
+					java.util.Date selectedDate2 = (java.util.Date) datePicker2.getModel().getValue();
+					java.sql.Date sqlDate2 = new java.sql.Date(selectedDate2.getTime());
 					
 					stmt6.setInt(1, patientId);
 					stmt6.setInt(2, professionId);
-					stmt6.setDate(3, sqlDate);
+					stmt6.setDate(3, sqlDate2);
 					stmt6.setDate(4, null); // We assume that the patient is in CDI
 					stmt6.executeUpdate();
 					
