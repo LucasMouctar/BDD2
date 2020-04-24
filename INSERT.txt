@@ -7,3 +7,9 @@ INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_pa
 INSERT INTO PATIENT (nom_patient, prenom_patient, email_patient, mot_de_passe_patient, moyenid_moyen) VALUES ('Henry', 'Dupont', 'henry.dupont@gmail.com', '1234', 2);
 INSERT INTO CRENEAU (datedebut_creneau, datefin_creneau) VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO consultation VALUES (1, 1, 100, 'CB', 'POSTURE', 'MOT_CLEF', ' COMPORTEMEN', 'CLASSIFICATION', '10', CURRENT_TIMESTAMP);
+-- INSERT INTO CRENEAU (datedebut_creneau, datefin_creneau) VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- INSERT INTO CRENEAU (datedebut_creneau, datefin_creneau) VALUES (CURRENT_TIMESTAMP + 1, CURRENT_TIMESTAMP + 1);
+-- INSERT INTO consultation VALUES (1, 1, 100, 'CB', 'POSTURE', 'MOT_CLEF', ' COMPORTEMEN', 'CLASSIFICATION', '10', CURRENT_TIMESTAMP);
+SELECT TO_DATE(TO_CHAR(datedebut_creneau,'MM/DD/YYYY HH24:MI:SS'),'MM/DD/YYYY HH24:MI:SS') FROM CRENEAU;
+SELECT * FROM CRENEAU WHERE TRUNC(datedebut_creneau) = '24/04/20';
+SELECT TO_DATE(TO_CHAR(datedebut_creneau,'MM/DD/YYYY HH24:MI:SS'),'MM/DD/YYYY HH24:MI:SS') FROM CRENEAU;
