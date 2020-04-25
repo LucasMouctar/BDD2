@@ -10,16 +10,20 @@ import java.awt.event.WindowEvent;
 
 public class AdminWindow extends JFrame
 {
+	
+	
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 800;
 	
 	JLabel labelAdmin = new JLabel("Bienvenue !");
 	JButton buttonAdd = new JButton("Inscription d'un nouveau patient");
-	JButton buttonRdv1 = new JButton("Voir mes rdv antÃ©rieurs et futur");
-	JButton buttonRdv2 = new JButton("Voir mes rdv pour 1 jour");
+	JButton buttonHistoricMeeting = new JButton("Voir mes rendez-vous anterieurs et futur");
+	JButton buttonWeeklyOrDailyMeeting = new JButton("Voir mes rendez-vous pour une semaine / journée spécifique");
 	
 	public AdminWindow(Connection conn)
 	{		
+		super("Administrateur");
+		
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
 		setLocationRelativeTo(null);
@@ -28,7 +32,7 @@ public class AdminWindow extends JFrame
 		
 		setLayout(new GridLayout(4,2,5,5));
 			
-		buttonRdv1.addActionListener(new ActionListener()
+		buttonHistoricMeeting.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent e) 
@@ -37,7 +41,7 @@ public class AdminWindow extends JFrame
 				}
 			});
 		
-		buttonRdv2.addActionListener(new ActionListener()
+		buttonWeeklyOrDailyMeeting.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e) 
@@ -59,7 +63,7 @@ public class AdminWindow extends JFrame
 		{
 			public void windowClosing(WindowEvent windowEvent)
 			{
-				if(JOptionPane.showConfirmDialog(null, "Sure ?", "Close", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+				if(JOptionPane.showConfirmDialog(null, "Confirmer la fermeture ?", "Fermeture", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
 				{
 					try 
 					{
@@ -75,9 +79,8 @@ public class AdminWindow extends JFrame
 		});
 		
 		add(labelAdmin);
-		add(buttonRdv1);
-		add(buttonRdv2);
+		add(buttonHistoricMeeting);
+		add(buttonWeeklyOrDailyMeeting);
 		add(buttonAdd);
-		//Surement d'autres boutons Ã  ajouter
 	}
 }

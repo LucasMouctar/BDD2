@@ -15,6 +15,8 @@ public class PatientAllMeetingWindow extends JFrame
 	
 	public PatientAllMeetingWindow(Connection conn, int patient_id)
 	{
+		super("Historique des rendez-vous");
+		
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
 		setLocationRelativeTo(null);
@@ -22,6 +24,13 @@ public class PatientAllMeetingWindow extends JFrame
 		setResizable(false);
 		
 		setLayout(new GridLayout(1,1));
+		
+		getAllMeeting(conn, patient_id);
+	
+	}
+	
+	public void getAllMeeting(Connection conn, int patient_id)
+	{
 		
 		DefaultTableModel model = new DefaultTableModel();
 		
@@ -35,26 +44,17 @@ public class PatientAllMeetingWindow extends JFrame
 		
 		try 
 		{
-			PreparedStatement stmt1 = conn.prepareStatement("SELECT * FROM CONSULTATION WHERE PATIENTID_PATIENT = ?");
+			PreparedStatement stmt1 = conn.prepareStatement("SELECT DATEDEBUT_CRENEAU, DATEFIN_CRENEAU, PRIX_CONSULTATION, TYPEREGLEMENT_CONSULTATION, DATEREGLEMENT_CONSULTATION FROM CONSULTATION CON JOIN CRENEAU CRE ON CRE.CRENEAUXID_CRENEAU = CON.CRENEAUXID_CRENEAU WHERE PATIENTID_PATIENT = ?");
 			stmt1.setInt(1, patient_id);
 		
 			ResultSet rset1 = stmt1.executeQuery();
 			
 	        while(rset1.next())
 	        {
-	        	PreparedStatement stmt2 = conn.prepareStatement("SELECT * FROM CRENEAU WHERE CRENEAUXID_CRENEAU = ?");
-	        	stmt2.setInt(1,rset1.getInt("CRENEAUXID_CRENEAU"));
-	        	ResultSet rset2 = stmt2.executeQuery();
-	        	rset2.next();
-
-	            model.addRow(new Object[]{rset2.getDate("DATEDEBUT_CRENEAU"), rset2.getTime("DATEDEBUT_CRENEAU"), rset2.getTime("DATEFIN_CRENEAU"),rset1.getInt("PRIX_CONSULTATION"), rset1.getString("TYPEREGLEMENT_CONSULTATION"),rset1.getDate("DATEREGLEMENT_CONSULTATION")});
+	            model.addRow(new Object[]{rset1.getDate("DATEDEBUT_CRENEAU"), rset1.getTime("DATEDEBUT_CRENEAU"), rset1.getTime("DATEFIN_CRENEAU"),rset1.getInt("PRIX_CONSULTATION"), rset1.getString("TYPEREGLEMENT_CONSULTATION"),rset1.getDate("DATEREGLEMENT_CONSULTATION")});
 	        }
 	        
 			JTable table = new JTable(model);
-			
-			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			TableColumnAdjuster tca = new TableColumnAdjuster(table); // Using TableColumnAdjuster (opensource code) tool we can easily resize column width
-			tca.adjustColumns();
 			
 			add(new JScrollPane(table));
 		} 

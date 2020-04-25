@@ -34,12 +34,19 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 	private final JFrame frame = this; // Needed to access the frame inside the action listenener
 	
 	private JDatePickerImpl datePicker;
-	private JButton buttonOneDay = new JButton("Voir");
-	private JButton buttonOneWeek = new JButton("Semaine");
+	private JButton buttonOneDay = new JButton("Voir les rendez-vous de ce jour");
+	private JButton buttonOneWeek = new JButton("Voir les rendez-vous de cette semaine");
 	private JPanel resultPanel;
 	
 	public AdminWeeklyOrDaylyMeeting(Connection conn)
 	{	
+		super("Liste des rendez-vous");
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		setLocationRelativeTo(null);
+		
+		setResizable(false);
+		
 		setBasicProperties();
 		
 		buttonOneDay.addActionListener(new ActionListener()
@@ -82,7 +89,7 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 					
 					java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 				
-					seeMeetingGivenDay(conn, sqlDate, 0);
+					seeMeetingGivenDay(conn, sqlDate, 0); // We display the chosen day and the 6 following day
 					seeMeetingGivenDay(conn, sqlDate, 1);
 					seeMeetingGivenDay(conn, sqlDate, 2);
 					seeMeetingGivenDay(conn, sqlDate, 3);
@@ -99,13 +106,7 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 	}
 	
 	public void setBasicProperties()
-	{
-		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-		
-		setLocationRelativeTo(null);
-		
-		setResizable(false);
-		
+	{	
 		setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
@@ -146,7 +147,7 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 1;
-		frame.add(resultPanel,c);
+		add(resultPanel,c);
 		
 	}
 	
@@ -202,7 +203,7 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 			
 			JScrollPane scrollPane = new JScrollPane(table);
 			
-			java.sql.Date sqlRealDate = new java.sql.Date(sqlDate.getTime() + 24*60*60*1000*nbDayToAdd);
+			java.sql.Date sqlRealDate = new java.sql.Date(sqlDate.getTime() + 24*60*60*1000*nbDayToAdd); // We add day to the current date
 			
 			scrollPane.setBorder(BorderFactory.createTitledBorder (sqlRealDate+""));
 			
