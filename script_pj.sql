@@ -33,7 +33,7 @@ EXECUTE IMMEDIATE 'DROP TABLE Patient CASCADE CONSTRAINTS' ;
 END IF ;  
 END ; 
 /
-CREATE TABLE Patient (patientId_Patient INT NOT NULL, nom_Patient VARCHAR(60) NOT NULL, prenom_Patient VARCHAR(60) NOT NULL, email_Patient VARCHAR(60) NOT NULL, mot_de_passe_Patient VARCHAR(60) NOT NULL, moyenId_Moyen INT, PRIMARY KEY (patientId_Patient)); 
+CREATE TABLE Patient (patientId_Patient INT NOT NULL, nom_Patient VARCHAR(60) NOT NULL, prenom_Patient VARCHAR(60) NOT NULL, email_Patient VARCHAR(60) NOT NULL, mot_de_passe_Patient VARCHAR(60) NOT NULL, date_de_naissance_Patient DATE NOT NULL, moyenId_Moyen INT, PRIMARY KEY (patientId_Patient)); 
 DECLARE 
 existe_SeqPatient INTEGER ;  
 BEGIN 
