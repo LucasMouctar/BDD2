@@ -12,8 +12,9 @@ public class AdminWindow extends JFrame
 	private final int WINDOW_HEIGHT = 800;
 	
 	JLabel labelAdmin = new JLabel("Bienvenue !");
-	JButton buttonAdd = new JButton("Inscription d'un nouveau patient");
-	JButton buttonRdv = new JButton("Voir mes rdv antérieurs et futur");
+	JButton buttonAddPatient = new JButton("Inscription d'un nouveau patient");
+	JButton buttonSeeMeeting = new JButton("Voir mes rendez-vous");
+	JButton buttonAddMeeting = new JButton("Ajouter un rendez-vous");
 	
 	public AdminWindow(Connection conn)
 	{		
@@ -25,27 +26,40 @@ public class AdminWindow extends JFrame
 		
 		setLayout(new GridLayout(3,2,5,5));
 			
-		buttonRdv.addActionListener(new ActionListener()
-			{
+		buttonSeeMeeting.addActionListener(
+			new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					//new RdvWindow(conn).setVisible(true);
+					// new RdvWindow(conn).setVisible(true);
 				}
-			});
-		
-		buttonAdd.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				new AddWindow(conn).setVisible(true);
 			}
-		});		
+		);
+		
+		buttonAddMeeting.addActionListener(
+			new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) 
+				{
+					new AddMeetingWindow(conn).setVisible(true);
+				}
+			}
+		);	
+		
+		buttonAddPatient.addActionListener(
+			new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) 
+				{
+					new AddWindow(conn).setVisible(true);
+				}
+			}
+		);	
 		
 		add(labelAdmin);
-		add(buttonRdv);
-		add(buttonAdd);
+		add(buttonSeeMeeting);
+		add(buttonAddMeeting);
+		add(buttonAddPatient);
 		//Surement d'autres boutons à ajouter
 	}
 }
