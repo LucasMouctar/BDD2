@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 
 public class AddWindow extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 800;
 	
@@ -36,7 +37,7 @@ public class AddWindow extends JFrame
 	private JTextField textJob = new JTextField(20);
 	private JDatePickerImpl datePicker1;
 	private JDatePickerImpl datePicker2;
-	private JComboBox listMeans;
+	private JComboBox<?> listMeans;
 	
 	private JButton buttonAdd = new JButton("Add");
 	
@@ -101,7 +102,7 @@ public class AddWindow extends JFrame
 				means[i] = rs.getString(1);
 				i++;
 			}
-			listMeans = new JComboBox(means);
+			listMeans = new JComboBox<>(means);
 			stmt.close();
 			rs.close();
 		} 

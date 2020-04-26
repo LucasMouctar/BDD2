@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 
 public class PatientWindow extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 800;
 	

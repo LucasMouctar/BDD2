@@ -14,12 +14,10 @@ import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.impl.DateComponentFormatter;
@@ -29,6 +27,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 public class AdminWeeklyOrDaylyMeeting extends JFrame
 {	
+	private static final long serialVersionUID = 3601234845868338245L;
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 800;
 	private final JFrame frame = this; // Needed to access the frame inside the action listenener
