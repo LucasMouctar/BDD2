@@ -16,6 +16,7 @@ public class AddMeetingWindow extends JFrame {
 	private JTextField startTimestampField = new JTextField(20);
 	private JTextField endTimestampField = new JTextField(20);
 	private JButton confirmationButton = new JButton("Add Meeting");
+	private JComboBox<JComboItem> patientSelection = new JComboBox<JComboItem>();
 	
 	public AddMeetingWindow (Connection conn) {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -32,24 +33,64 @@ public class AddMeetingWindow extends JFrame {
 			}
 		);
 		
+		try {
+			PreparedStatement statement = conn.prepareStatement("SELECT PATIENTID_PATIENT, PRENOM_PATIENT, NOM_PATIENT FROM PATIENT");
+			ResultSet result = statement.executeQuery();
+			
+	        while (result.next()) {
+	        	patientSelection.addItem(
+        			new JComboItem(result.getString("NOM_PATIENT").toUpperCase() + ' ' + result.getString("PRENOM_PATIENT"), result.getInt("PATIENTID_PATIENT"))
+    			);
+        	}
+	        
+	        result.close();
+			statement.close();
+		} catch (Exception e) {
+			
+		}
+		
+		
 		add(startTimestampLabel);
 		add(startTimestampField);
 		add(endTimestampLabel);
 		add(endTimestampField);
+		add(patientSelection);
 		add(new JLabel(""));
 		add(confirmationButton);
 	}
 	
 	public void addMeetingDB (Connection conn, String startTimestamp, String endTimestamp) {
 		try {
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO Creneau (DATEDEBUT_CRENEAU, DATEFIN_CRENEAU) VALUES('" + startTimestamp + "','" + endTimestamp + "')");
+			PreparedStatement statement = conn.prepareStatement("SELECT CRENEAUXID_CRENEAU FROM CRENEAU WHERE DATEDEBUT_CRENEAU='" + startTimestamp + "' AND DATEFIN_CRENEAU='" + endTimestamp + "'");
+			ResultSet result = statement.executeQuery();
+			// 02-02-1999 10:00:00
+			int slotId;
+			if (result.isBeforeFirst()) {
+				result.next();
+				slotId = result.getInt("CRENEAUXID_CRENEAU");
+			} else {
+				statement = conn.prepareStatement("INSERT INTO Creneau (DATEDEBUT_CRENEAU, DATEFIN_CRENEAU) VALUES('" + startTimestamp + "','" + endTimestamp + "')", Statement.RETURN_GENERATED_KEYS);
+				result = statement.executeQuery();
+				if (!result.next()) {
+					JOptionPane.showMessageDialog(null, "Incorrect syntax");
+				}
+				
+				statement = conn.prepareStatement("SELECT CRENEAUXID_CRENEAU.CURRVAL FROM DUAL");
+				result = statement.executeQuery();
+				result.next();
+				slotId = (int) result.getLong(1);
+			}
 			
-			ResultSet rset = stmt.executeQuery();
-			if (!rset.next()) {
+			statement = conn.prepareStatement(
+					"INSERT INTO CONSULTATION (CRENEAUXID_CRENEAU, PATIENTID_PATIENT) VALUES(" + slotId + ", " + ((JComboItem)patientSelection.getSelectedItem()).getValue() + ")"
+			);
+			result = statement.executeQuery();
+			
+			if (!result.next()) {
 				JOptionPane.showMessageDialog(null, "Incorrect syntax");
 			} else {
-				rset.close();
-				stmt.close();
+				result.close();
+				statement.close();
 				dispose();
 				new AddMeetingWindow(conn).setVisible(true);
 			}

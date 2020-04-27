@@ -62,9 +62,6 @@ public class AdminWindow extends JFrame
 			}
 		);	
 		
-		add(labelAdmin);
-		add(buttonAddPatient);
-		
 		buttonWeeklyOrDailyMeeting.addActionListener(new ActionListener()
 		{
 			@Override
@@ -92,7 +89,11 @@ public class AdminWindow extends JFrame
 				}
 			}
 		});
+
 		
+		add(labelAdmin);
+		add(buttonAddPatient);
+		add(buttonAddMeeting);
 		add(buttonHistoricMeeting);
 		add(buttonWeeklyOrDailyMeeting);
 	}
