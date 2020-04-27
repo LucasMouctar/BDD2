@@ -63,26 +63,29 @@ public class AddMeetingWindow extends JFrame {
 		try {
 			PreparedStatement statement = conn.prepareStatement("SELECT CRENEAUXID_CRENEAU FROM CRENEAU WHERE DATEDEBUT_CRENEAU='" + startTimestamp + "' AND DATEFIN_CRENEAU='" + endTimestamp + "'");
 			ResultSet result = statement.executeQuery();
-			// 02-02-1999 10:00:00
-			int slotId;
+			long slotId;
 			if (result.isBeforeFirst()) {
 				result.next();
-				slotId = result.getInt("CRENEAUXID_CRENEAU");
+				slotId = result.getLong("CRENEAUXID_CRENEAU");
 			} else {
-				statement = conn.prepareStatement("INSERT INTO Creneau (DATEDEBUT_CRENEAU, DATEFIN_CRENEAU) VALUES('" + startTimestamp + "','" + endTimestamp + "')", Statement.RETURN_GENERATED_KEYS);
-				result = statement.executeQuery();
-				if (!result.next()) {
+				statement = conn.prepareStatement("INSERT INTO Creneau (DATEDEBUT_CRENEAU, DATEFIN_CRENEAU) VALUES('" + startTimestamp + "','" + endTimestamp + "')", new String[] { "CRENEAUXID_CRENEAU" });
+				statement.executeUpdate();
+				result = statement.getGeneratedKeys();
+				if (result.next()) {
+					System.out.println(result.getString(1));
+					System.out.println(result);
+					slotId = result.getLong(1);
+				} else {
+					result.close();
+					statement.close();
 					JOptionPane.showMessageDialog(null, "Incorrect syntax");
+					return;
 				}
 				
-				statement = conn.prepareStatement("SELECT CRENEAUXID_CRENEAU.CURRVAL FROM DUAL");
-				result = statement.executeQuery();
-				result.next();
-				slotId = (int) result.getLong(1);
 			}
 			
 			statement = conn.prepareStatement(
-					"INSERT INTO CONSULTATION (CRENEAUXID_CRENEAU, PATIENTID_PATIENT) VALUES(" + slotId + ", " + ((JComboItem)patientSelection.getSelectedItem()).getValue() + ")"
+				"INSERT INTO CONSULTATION (CRENEAUXID_CRENEAU, PATIENTID_PATIENT) VALUES(" + slotId + ", " + ((JComboItem)patientSelection.getSelectedItem()).getValue() + ")"
 			);
 			result = statement.executeQuery();
 			
