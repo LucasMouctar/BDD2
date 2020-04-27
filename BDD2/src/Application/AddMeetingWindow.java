@@ -13,6 +13,7 @@ public class AddMeetingWindow extends JFrame {
 	
 	private JLabel startTimestampLabel = new JLabel("Start date (DD-MM-YYYY hh:mm:ss) :");
 	private JLabel endTimestampLabel = new JLabel("End date (DD-MM-YYYY hh:mm:ss) :");
+	private JLabel patientLabel = new JLabel("Enter the name of the patient :");
 	private JTextField startTimestampField = new JTextField(20);
 	private JTextField endTimestampField = new JTextField(20);
 	private JButton confirmationButton = new JButton("Add Meeting");
@@ -22,7 +23,7 @@ public class AddMeetingWindow extends JFrame {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setLayout(new GridLayout(3,2,35,5));
+		setLayout(new GridLayout(4,2,5,5));
 		
 		confirmationButton.addActionListener(
 			new ActionListener() {
@@ -54,6 +55,7 @@ public class AddMeetingWindow extends JFrame {
 		add(startTimestampField);
 		add(endTimestampLabel);
 		add(endTimestampField);
+		add(patientLabel);
 		add(patientSelection);
 		add(new JLabel(""));
 		add(confirmationButton);

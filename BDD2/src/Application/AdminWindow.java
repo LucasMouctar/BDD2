@@ -30,7 +30,7 @@ public class AdminWindow extends JFrame
 		
 		setResizable(false);
 		
-		setLayout(new GridLayout(4,2,5,5));
+		setLayout(new GridLayout(5,2,5,5));
 			
 		buttonHistoricMeeting.addActionListener(new ActionListener()
 			{
