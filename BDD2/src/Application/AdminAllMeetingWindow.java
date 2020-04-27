@@ -41,7 +41,6 @@ public class AdminAllMeetingWindow extends JFrame
 		
 
 		model.addColumn("");
-		model.addColumn("");
 		model.addColumn("CLASSIFICATION");
 		model.addColumn("PRENOM");
 		model.addColumn("NOM");
@@ -57,7 +56,7 @@ public class AdminAllMeetingWindow extends JFrame
         model.addColumn("DATE REGLEMENT");
 		
 
-		JTable table = null;
+		JTable table = new JTable(model);
 		try 
 		{
 			PreparedStatement stmt1 = conn.prepareStatement("SELECT CLASSIFICATION_CONSULTATION, PRENOM_PATIENT, NOM_PATIENT, CON.CRENEAUXID_CRENEAU, CON.PATIENTID_PATIENT, DATEDEBUT_CRENEAU, DATEFIN_CRENEAU, POSTURE_CONSULTATION, MOT_CLEF_CONSULTATION, COMPORTEMENT_CONSULTATION, NOTEANXIETE_CONSULTATION, PRIX_CONSULTATION, TYPEREGLEMENT_CONSULTATION, DATEREGLEMENT_CONSULTATION FROM CONSULTATION CON JOIN PATIENT P ON CON.PATIENTID_PATIENT = P.PATIENTID_PATIENT JOIN CRENEAU CRE ON CRE.CRENEAUXID_CRENEAU = CON.CRENEAUXID_CRENEAU");
@@ -101,8 +100,11 @@ public class AdminAllMeetingWindow extends JFrame
 
 								stmt2 = conn.prepareStatement("DELETE FROM CRENEAU WHERE NOT EXISTS(SELECT NULL FROM CONSULTATION WHERE CONSULTATION.CRENEAUXID_CRENEAU = CRENEAU.CRENEAUXID_CRENEAU)");
 								rset2 = stmt2.executeQuery();
-								rset2.next(); 
-								System.out.println("ok");
+								rset2.next();
+								rset2.close();
+								stmt2.close();
+								dispose();
+								new AdminAllMeetingWindow(conn).setVisible(true);
 							} catch (SQLException e) {
 								JOptionPane.showMessageDialog(null, e.getMessage());
 							}
@@ -111,11 +113,13 @@ public class AdminAllMeetingWindow extends JFrame
             		0
     			);
 	        }
-			
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			TableColumnAdjuster tca = new TableColumnAdjuster(table); // Using TableColumnAdjuster (opensource code) tool we can easily resize column width
 			tca.adjustColumns();
 			add(new JScrollPane(table));
+
+			rset1.close();
+			stmt1.close();
 		} 
 		catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
