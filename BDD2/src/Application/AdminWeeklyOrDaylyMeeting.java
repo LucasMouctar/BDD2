@@ -157,8 +157,8 @@ public class AdminWeeklyOrDaylyMeeting extends JFrame
 		{
 			DefaultTableModel model = new DefaultTableModel();
 		
-			
-			
+			model.addColumn("");
+			model.addColumn("");
 			model.addColumn("CLASSIFICATION");
 			model.addColumn("PRENOM");
 			model.addColumn("NOM");

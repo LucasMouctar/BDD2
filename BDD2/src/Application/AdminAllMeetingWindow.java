@@ -41,6 +41,7 @@ public class AdminAllMeetingWindow extends JFrame
 		
 
 		model.addColumn("");
+		model.addColumn("");
 		model.addColumn("CLASSIFICATION");
 		model.addColumn("PRENOM");
 		model.addColumn("NOM");
@@ -65,8 +66,7 @@ public class AdminAllMeetingWindow extends JFrame
 	        while(rset1.next()) {
 	            model.addRow(new Object[]{
 	            		"‎🗑",
-//	            		deleteButton,
-//	            		modifyButton,
+	            		"‎✎",
 	            		rset1.getString("CLASSIFICATION_CONSULTATION"),
 	            		rset1.getString("PRENOM_PATIENT"),
 	            		rset1.getString("NOM_PATIENT"),
@@ -112,6 +112,20 @@ public class AdminAllMeetingWindow extends JFrame
 					},
             		0
     			);
+	            
+	            long slotId = rset1.getLong("CRENEAUXID_CRENEAU");
+	            long patientId = rset1.getLong("PATIENTID_PATIENT");
+	            new ButtonColumn(
+            		table,
+            		new AbstractAction() {
+						private static final long serialVersionUID = 1L;
+						@Override
+						public void actionPerformed(ActionEvent event) {
+							new EditMeetingWindow(conn, slotId, patientId).setVisible(true);
+						}
+					},
+            		1
+    			);
 	        }
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			TableColumnAdjuster tca = new TableColumnAdjuster(table); // Using TableColumnAdjuster (opensource code) tool we can easily resize column width
@@ -120,7 +134,7 @@ public class AdminAllMeetingWindow extends JFrame
 
 			rset1.close();
 			stmt1.close();
-		} 
+		}
 		catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
