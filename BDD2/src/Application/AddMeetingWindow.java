@@ -1,6 +1,9 @@
 package Application;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -70,12 +73,41 @@ public class AddMeetingWindow extends JFrame {
 				result.next();
 				slotId = result.getLong("CRENEAUXID_CRENEAU");
 			} else {
+				SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
+				SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+				java.util.Date startTime = newFormatter.parse(startTimestamp);
+				java.util.Date endTime = newFormatter.parse(endTimestamp);
+				System.out.println(startTime.getHours());
+				if (startTime.getHours() < 8 || startTime.getHours() > 19 || endTime.getHours() < 8 || endTime.getHours() > 19) {
+					JOptionPane.showMessageDialog(null, "La psy ne peut travailler qu'entre 8H00 et 20H00");
+					return;
+				}
+
+				// Start and end time now represent 
+				startTime.setHours(0);
+				startTime.setMinutes(0);
+				startTime.setSeconds(0);
+				endTime.setHours(23);
+				endTime.setMinutes(59);
+				endTime.setSeconds(59);
+				statement = conn.prepareStatement("SELECT DATEDEBUT_CRENEAU, DATEFIN_CRENEAU FROM CRENEAU WHERE DATEDEBUT_CRENEAU>'" + newFormatter.format(startTime) + "' AND DATEDEBUT_CRENEAU<'" + newFormatter.format(endTime) + "'");
+				ResultSet result2 = statement.executeQuery();
+				
+				long totalWorkTime = 0;
+				while (result.next()) {
+					java.util.Date endSlotTime = oldFormatter.parse(result.getString("DATEDEBUT_CRENEAU"));
+					java.util.Date startSlotTime = oldFormatter.parse(result.getString("DATEDEBUT_CRENEAU"));
+					totalWorkTime += (endSlotTime.getTime() - startSlotTime.getTime()) / 1000;
+				}
+				if (totalWorkTime > 36000) {
+					JOptionPane.showMessageDialog(null, "La psy ne peut travailler plus de 10H");
+					return;
+				}
+				
 				statement = conn.prepareStatement("INSERT INTO Creneau (DATEDEBUT_CRENEAU, DATEFIN_CRENEAU) VALUES('" + startTimestamp + "','" + endTimestamp + "')", new String[] { "CRENEAUXID_CRENEAU" });
 				statement.executeUpdate();
 				result = statement.getGeneratedKeys();
 				if (result.next()) {
-					System.out.println(result.getString(1));
-					System.out.println(result);
 					slotId = result.getLong(1);
 				} else {
 					result.close();
@@ -99,7 +131,7 @@ public class AddMeetingWindow extends JFrame {
 				dispose();
 				new AddMeetingWindow(conn).setVisible(true);
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
 	}
