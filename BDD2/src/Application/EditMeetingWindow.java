@@ -3,6 +3,8 @@ package Application;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.util.Calendar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -141,12 +143,18 @@ public class EditMeetingWindow extends JFrame {
 					SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 					java.util.Date startTime = newFormatter.parse(startTimestampField.getText());
 					java.util.Date endTime = newFormatter.parse(endTimestampField.getText());
-					System.out.println(startTime.getHours());
 					if (startTime.getHours() < 8 || startTime.getHours() > 19 || endTime.getHours() < 8 || endTime.getHours() > 19) {
 						JOptionPane.showMessageDialog(null, "La psy ne peut travailler qu'entre 8H00 et 20H00");
 						return;
 					}
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(startTime);
+				    if(cal.get(Calendar.DAY_OF_WEEK) == 7) {
+						JOptionPane.showMessageDialog(null, "La psy ne pas travailler le dimanche");
+						return;
+				    }
 
+					long totalWorkTime = (endTime.getTime() - startTime.getTime()) / 1000;
 					// Start and end time now represent 
 					startTime.setHours(0);
 					startTime.setMinutes(0);
@@ -155,16 +163,15 @@ public class EditMeetingWindow extends JFrame {
 					endTime.setMinutes(59);
 					endTime.setSeconds(59);
 					statement = conn.prepareStatement("SELECT DATEDEBUT_CRENEAU, DATEFIN_CRENEAU FROM CRENEAU WHERE DATEDEBUT_CRENEAU>'" + newFormatter.format(startTime) + "' AND DATEDEBUT_CRENEAU<'" + newFormatter.format(endTime) + "'");
-					ResultSet result2 = statement.executeQuery();
+					result = statement.executeQuery();
 					
-					long totalWorkTime = 0;
 					while (result.next()) {
 						java.util.Date endSlotTime = oldFormatter.parse(result.getString("DATEDEBUT_CRENEAU"));
 						java.util.Date startSlotTime = oldFormatter.parse(result.getString("DATEDEBUT_CRENEAU"));
 						totalWorkTime += (endSlotTime.getTime() - startSlotTime.getTime()) / 1000;
 					}
 					if (totalWorkTime > 36000) {
-						JOptionPane.showMessageDialog(null, "La psy ne peut travailler plus de 10H");
+						JOptionPane.showMessageDialog(null, "La psy ne peut pas travailler plus de 10H apr jour");
 						return;
 					}
 					
@@ -181,7 +188,6 @@ public class EditMeetingWindow extends JFrame {
 					}
 				}
 				
-				System.out.println(newSlotId);
 				statement = conn.prepareStatement(
 					"UPDATE CONSULTATION SET "
 					+ "CRENEAUXID_CRENEAU=" + newSlotId
