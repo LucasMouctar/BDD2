@@ -3,6 +3,7 @@ package Application;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,6 +82,13 @@ public class AddMeetingWindow extends JFrame {
 					JOptionPane.showMessageDialog(null, "La psy ne peut travailler qu'entre 8H00 et 20H00");
 					return;
 				}
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(startTime);
+			    if(cal.get(Calendar.DAY_OF_WEEK) == 7) {
+					JOptionPane.showMessageDialog(null, "La psy ne pas travailler le dimanche");
+					return;
+			    }
 
 				long totalWorkTime = (endTime.getTime() - startTime.getTime()) / 1000;
 				// Start and end time now represent 
