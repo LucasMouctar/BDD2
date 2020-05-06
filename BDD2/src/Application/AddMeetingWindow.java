@@ -15,8 +15,8 @@ public class AddMeetingWindow extends JFrame {
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 800;
 	
-	private JLabel startTimestampLabel = new JLabel("Start date (DD-MM-YYYY hh:mm:ss) :");
-	private JLabel endTimestampLabel = new JLabel("End date (DD-MM-YYYY hh:mm:ss) :");
+	private JLabel startTimestampLabel = new JLabel("Start date (DD-MM-YYYY HH:mm:ss) :");
+	private JLabel endTimestampLabel = new JLabel("End date (DD-MM-YYYY HH:mm:ss) :");
 	private JLabel patientLabel = new JLabel("Enter the name of the patient :");
 	private JTextField startTimestampField = new JTextField(20);
 	private JTextField endTimestampField = new JTextField(20);
@@ -74,10 +74,11 @@ public class AddMeetingWindow extends JFrame {
 				result.next();
 				slotId = result.getLong("CRENEAUXID_CRENEAU");
 			} else {
-				SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
-				SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+				SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+				SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 				java.util.Date startTime = newFormatter.parse(startTimestamp);
 				java.util.Date endTime = newFormatter.parse(endTimestamp);
+				System.out.println(startTime.getHours());
 				if (startTime.getHours() < 8 || startTime.getHours() > 19 || endTime.getHours() < 8 || endTime.getHours() > 19) {
 					JOptionPane.showMessageDialog(null, "La psy ne peut travailler qu'entre 8H00 et 20H00");
 					return;
