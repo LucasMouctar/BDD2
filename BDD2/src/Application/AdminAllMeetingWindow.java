@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -33,7 +34,7 @@ public class AdminAllMeetingWindow extends JFrame
 		
 		setResizable(false);
 		
-		setLayout(new GridLayout(1,1));
+		setLayout(new GridLayout(4,1));
 		
 		getAllMeetings(conn);
 	}
@@ -129,12 +130,31 @@ public class AdminAllMeetingWindow extends JFrame
 			tca.adjustColumns();
 			
 			add(new JScrollPane(table));
-			add(labelSlotId);
-			add(textSlotId);
-			add(labelPatientId);
-			add(textPatientId);
-			add(editButton);
-			add(deleteButton);
+			
+			
+			JPanel slotPanel = new JPanel();
+			
+			slotPanel.setLayout(new GridLayout(1,2));
+			slotPanel.add(labelSlotId);
+			slotPanel.add(textSlotId);
+			add(slotPanel);
+			
+			
+			JPanel patientPanel = new JPanel();
+			
+			patientPanel.setLayout(new GridLayout(1,2));
+			patientPanel.add(labelPatientId);
+			patientPanel.add(textPatientId);
+			add(patientPanel);
+			
+			
+			JPanel buttonPanel = new JPanel();
+			
+			buttonPanel.setLayout(new GridLayout(1,2));
+			buttonPanel.add(editButton);
+			buttonPanel.add(deleteButton);
+			add(buttonPanel);
+			
 
 			rset1.close();
 			stmt1.close();

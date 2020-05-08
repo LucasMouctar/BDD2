@@ -50,8 +50,9 @@ public class AddMeetingWindow extends JFrame {
 	        
 	        result.close();
 			statement.close();
-		} catch (Exception e) {
-			
+		} catch (Exception e) 
+		{
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		
 		
@@ -147,7 +148,7 @@ public class AddMeetingWindow extends JFrame {
 				new AddMeetingWindow(conn).setVisible(true);
 			}
 		} catch (SQLException | ParseException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 }
