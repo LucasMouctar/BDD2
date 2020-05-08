@@ -2,16 +2,19 @@ package Application;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class AdminAllMeetingWindow extends JFrame
@@ -37,11 +40,50 @@ public class AdminAllMeetingWindow extends JFrame
 	
 	public void getAllMeetings(Connection conn)
 	{
-		DefaultTableModel model = new DefaultTableModel();
-		
+		JTextField textPatientId = new JTextField(10);
+		JTextField textSlotId = new JTextField(10);
+		JLabel labelPatientId = new JLabel("ID patient : ");
+		JLabel labelSlotId = new JLabel("ID créneau : ");
+        
+        JButton editButton = new JButton("Editer");
+        JButton deleteButton = new JButton("Supprimer");
+        
+        deleteButton.addActionListener(
+        	new ActionListener() {
+        		public void actionPerformed(ActionEvent event) {
+					PreparedStatement stmt2;
+					ResultSet rset2;
+					try {
+						stmt2 = conn.prepareStatement("DELETE FROM CONSULTATION WHERE CRENEAUXID_CRENEAU=" + textSlotId.getText() + " AND PATIENTID_PATIENT=" + textPatientId.getText());
+						rset2 = stmt2.executeQuery();
+						rset2.next();
 
-		model.addColumn("");
-		model.addColumn("");
+						stmt2 = conn.prepareStatement("DELETE FROM CRENEAU WHERE NOT EXISTS(SELECT NULL FROM CONSULTATION WHERE CONSULTATION.CRENEAUXID_CRENEAU = CRENEAU.CRENEAUXID_CRENEAU)");
+						rset2 = stmt2.executeQuery();
+						rset2.next();
+						rset2.close();
+						stmt2.close();
+						dispose();
+						new AdminAllMeetingWindow(conn).setVisible(true);
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, e.getMessage());
+					}
+				}
+        	}
+        );
+        
+        editButton.addActionListener(
+        	new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+					new EditMeetingWindow(conn, Integer.decode(textSlotId.getText()), Integer.decode(textPatientId.getText())).setVisible(true);
+				}
+        	}
+        );
+	
+		DefaultTableModel model = new DefaultTableModel();
+
+		model.addColumn("ID créneau");
+		model.addColumn("ID patient");
 		model.addColumn("CLASSIFICATION");
 		model.addColumn("PRENOM");
 		model.addColumn("NOM");
@@ -56,7 +98,6 @@ public class AdminAllMeetingWindow extends JFrame
         model.addColumn("REGLEMENT");
         model.addColumn("DATE REGLEMENT");
 		
-
 		JTable table = new JTable(model);
 		try 
 		{
@@ -65,8 +106,8 @@ public class AdminAllMeetingWindow extends JFrame
 			
 	        while(rset1.next()) {
 	            model.addRow(new Object[]{
-	            		"‎🗑",
-	            		"‎✎",
+	            		rset1.getLong("CRENEAUXID_CRENEAU"),
+	            		rset1.getLong("PATIENTID_PATIENT"),
 	            		rset1.getString("CLASSIFICATION_CONSULTATION"),
 	            		rset1.getString("PRENOM_PATIENT"),
 	            		rset1.getString("NOM_PATIENT"),
@@ -82,55 +123,18 @@ public class AdminAllMeetingWindow extends JFrame
 	            		rset1.getDate("DATEREGLEMENT_CONSULTATION")
         		});
 	            table = new JTable(model);
-	            
-	            String action = "DELETE FROM CONSULTATION WHERE CRENEAUXID_CRENEAU=" + rset1.getInt("CRENEAUXID_CRENEAU") + " AND PATIENTID_PATIENT=" + rset1.getInt("PATIENTID_PATIENT");
-	            new ButtonColumn(
-            		table,
-            		new AbstractAction() {
-						private static final long serialVersionUID = 1L;
-						// Supprime la consultation associée puis supprime tous les créneaux qui n'ont pas de consultations associées
-						@Override
-						public void actionPerformed(ActionEvent event) {
-							PreparedStatement stmt2;
-							ResultSet rset2;
-							try {
-								stmt2 = conn.prepareStatement(action);
-								rset2 = stmt2.executeQuery();
-								rset2.next();
-
-								stmt2 = conn.prepareStatement("DELETE FROM CRENEAU WHERE NOT EXISTS(SELECT NULL FROM CONSULTATION WHERE CONSULTATION.CRENEAUXID_CRENEAU = CRENEAU.CRENEAUXID_CRENEAU)");
-								rset2 = stmt2.executeQuery();
-								rset2.next();
-								rset2.close();
-								stmt2.close();
-								dispose();
-								new AdminAllMeetingWindow(conn).setVisible(true);
-							} catch (SQLException e) {
-								JOptionPane.showMessageDialog(null, e.getMessage());
-							}
-						}
-					},
-            		0
-    			);
-	            
-	            long slotId = rset1.getLong("CRENEAUXID_CRENEAU");
-	            long patientId = rset1.getLong("PATIENTID_PATIENT");
-	            new ButtonColumn(
-            		table,
-            		new AbstractAction() {
-						private static final long serialVersionUID = 1L;
-						@Override
-						public void actionPerformed(ActionEvent event) {
-							new EditMeetingWindow(conn, slotId, patientId).setVisible(true);
-						}
-					},
-            		1
-    			);
 	        }
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			TableColumnAdjuster tca = new TableColumnAdjuster(table); // Using TableColumnAdjuster (opensource code) tool we can easily resize column width
 			tca.adjustColumns();
+			
 			add(new JScrollPane(table));
+			add(labelSlotId);
+			add(textSlotId);
+			add(labelPatientId);
+			add(textPatientId);
+			add(editButton);
+			add(deleteButton);
 
 			rset1.close();
 			stmt1.close();

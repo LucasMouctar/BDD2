@@ -52,8 +52,8 @@ public class EditMeetingWindow extends JFrame {
 			result = statement.executeQuery();
 			result.next();
 			
-			SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
-			SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+			SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 			try {
 				java.util.Date oldStartDate = oldFormatter.parse(result.getString("DATEDEBUT_CRENEAU"));
@@ -66,6 +66,7 @@ public class EditMeetingWindow extends JFrame {
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
+			System.out.println(result.getString("DATEDEBUT_CRENEAU"));
 			consultationPriceText.setText(Float.toString(result.getFloat("PRIX_CONSULTATION")));
 			paiementMeanText.setText(result.getString("TYPEREGLEMENT_CONSULTATION"));
 			postureText.setText(result.getString("POSTURE_CONSULTATION"));
@@ -139,7 +140,7 @@ public class EditMeetingWindow extends JFrame {
 					result.next();
 					newSlotId = result.getLong("CRENEAUXID_CRENEAU");
 				} else {
-					SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+					SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 					java.util.Date startTime = newFormatter.parse(startTimestampField.getText());
 					java.util.Date endTime = newFormatter.parse(endTimestampField.getText());
@@ -149,7 +150,7 @@ public class EditMeetingWindow extends JFrame {
 					}
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(startTime);
-				    if(cal.get(Calendar.DAY_OF_WEEK) == 7) {
+				    if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
 						JOptionPane.showMessageDialog(null, "La psy ne pas travailler le dimanche");
 						return;
 				    }

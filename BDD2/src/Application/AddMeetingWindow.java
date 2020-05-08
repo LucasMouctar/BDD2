@@ -74,7 +74,7 @@ public class AddMeetingWindow extends JFrame {
 				result.next();
 				slotId = result.getLong("CRENEAUXID_CRENEAU");
 			} else {
-				SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+				SimpleDateFormat oldFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				SimpleDateFormat newFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 				java.util.Date startTime = newFormatter.parse(startTimestamp);
 				java.util.Date endTime = newFormatter.parse(endTimestamp);
@@ -86,7 +86,7 @@ public class AddMeetingWindow extends JFrame {
 				
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(startTime);
-			    if(cal.get(Calendar.DAY_OF_WEEK) == 7) {
+			    if(cal.get(Calendar.DAY_OF_WEEK) == 1) {
 					JOptionPane.showMessageDialog(null, "La psy ne pas travailler le dimanche");
 					return;
 			    }
@@ -128,7 +128,7 @@ public class AddMeetingWindow extends JFrame {
 			statement = conn.prepareStatement("SELECT COUNT(*) FROM CONSULTATION WHERE CRENEAUXID_CRENEAU=" + slotId);
 			result = statement.executeQuery();
 			result.next();
-			if (result.getInt(1) > 3) {
+			if (result.getInt(1) > 2) {
 				JOptionPane.showMessageDialog(null, "Impossible d'avoir plus de trois patient sur une consultation");
 				return;
 			}
